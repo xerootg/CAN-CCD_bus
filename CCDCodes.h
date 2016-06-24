@@ -67,6 +67,12 @@ Check Engine Light = 0x00 off, 0xFF on
 #define CE_LIGHT_ID (0xF5)
 
 /*
+ID - Sentry Key Immobilizer Light
+SKIM Light = 0x00 off, 0xFF on (with brief buzz)
+*/
+#define SKIM_LIGHT_ID (0x0B)
+
+/*
 ID - Buzzer
 Buzzer = 0x00 off, 0xFF buzz briefly.
 */
