@@ -48,9 +48,9 @@ ID - 0x000000
 /*
 ID - Shift Light - ??
 Shift Light = 0x00 off, 0xFF on
-?? = Unknown
+Cruise Light = 0x00 off, 0xFF on
 */
-#define SHIFT_LIGHT_ID (0xA4)
+#define SHIFT_CRUISE_LIGHT_ID (0xA4)
 
 /*
 ID - Check Gauges Light - ??
