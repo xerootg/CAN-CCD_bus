@@ -14,6 +14,8 @@ KPH = Value
 #define SPEED_ID (0x24)
 
 /*
+Note: The RPM and MAP need to be updated on the CCD bus every few seconds if the engine is not running.
+Otherwise the odometer will display "no bus" on late 1990s models after twenty seconds.
 ID - RPM - MAP
 RPM = Value * 32
 MAP = (Value * 41) / 100
