@@ -1,6 +1,7 @@
 //Thanks to oh2nlt for documenting OBD-I information over a decade ago.  Codes listed here were reverse engineered from OBD-II Jeep electronics.
 
 /*
+Not actually an ID in usage?  This is the same as an open bus.
 ID - 0xFF
 */
 #define ECHO_ID (0xFF)
