@@ -1,3 +1,5 @@
+//Thanks to oh2nlt for documenting OBD-I information over a decade ago.  Codes listed here were reverse engineered from OBD-II Jeep electronics.
+
 /*
 ID - 0xFF
 */
@@ -41,6 +43,7 @@ Battery = Value - 128
 #define TEMPERATURE_ID (0x8C)
 
 /*
+Pre-OBD-II and/or export vehicles.
 ID - 0x000000
 */
 #define TRIP_DIST_ID (0xEE)
