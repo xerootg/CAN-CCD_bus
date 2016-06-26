@@ -41,17 +41,18 @@ void setup() {
 
 String dataIn;
 char CR = 10;
+float rpm = 800;
 void loop() {
 	delay(50);
-	ccdBus.setRPM(800 + random(0, 50));
+
+	if (Serial.available() > 0) {
+		dataIn = Serial.readStringUntil(CR);
+		rpm = dataIn.toFloat();
+	}
+
+	ccdBus.setRPM(rpm + random(0, 50));
 	ccdBus.doUpdates();
 
-	/*if (Serial.available() > 0) {
-		dataIn = Serial.readStringUntil(CR);
-		speed = speedToCcdByte(dataIn.toFloat());
-	}
-	delay(50);
-	ccdBusTx(SPEED_ID, 2, speed, speed);*/
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);
