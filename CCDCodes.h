@@ -1,3 +1,4 @@
+#include "Vehicles.h"
 //Thanks to oh2nlt for documenting OBD-I information over a decade ago.  Codes listed here were reverse engineered from OBD-II Jeep electronics.
 
 /*
@@ -8,8 +9,8 @@ ID - 0xFF
 
 /*
 ID - MPH - KPH
-MPH = Value
-KPH = Value
+MPH = Value * 0.625  Example: 128 * 0.625 = 80 MPH
+KPH = Value ? - Need a KPH gauge cluster to test and verify.
 */
 #define SPEED_ID (0x24)
 

@@ -1,3 +1,5 @@
+#define XJ_PLATFORM true
+
 #include <FlexCAN.h>
 #include "CCDCodes.h"
 
@@ -43,16 +45,17 @@ byte volts = 0x70;
 byte psi = 0x30;
 byte tempF = 0xA0;
 byte rpm = 0x25;
+byte speed = 0x00;
 void loop() {
 	delay(50);
 	ccdBusTx(RPM_MAP_ID, 2, rpm, 0x00);
 
 	if (Serial.available() > 0) {
 		dataIn = Serial.readStringUntil(CR);
-		tempF = coolTempToCcdByte(dataIn.toFloat());
+		speed = speedToCcdByte(dataIn.toFloat());
 	}
 	delay(50);
-	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, volts, psi, tempF, 0x00);
+	ccdBusTx(SPEED_ID, 2, speed, speed);
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);
@@ -94,6 +97,10 @@ void ccdBusTx(byte id, int numBytes, ...) {
 
 	checksum = checksum & 0xFF;
 	ccdBus.write(checksum);
+}
+
+byte speedToCcdByte(float speed) {
+	return constrain(speed * SPEED_MULTIPLIER, 0, 255);
 }
 
 byte rpmToCcdByte(int rpm) {
