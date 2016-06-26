@@ -106,6 +106,102 @@ void CCD::setVoltage(float voltage) {
 }
 
 /*
+ * Turn check engine light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setCheckEngineLight(bool on) {
+	bool previousState = this->checkEngineLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->checkEngineLightOn = on;
+	return previousState;
+}
+
+/*
+ * Turn check gauges light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setCheckGaugesLight(bool on) {
+	bool previousState = this->checkGaugesLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->checkGaugesLightOn = on;
+	return previousState;
+}
+
+/*
+ * Turn air bag light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setAirBagLight(bool on) {
+	bool previousState = this->airBagLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->airBagLightOn = on;
+	return previousState;
+}
+
+/*
+ * Turn skim light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setSKIMLight(bool on) {
+	bool previousState = this->skimLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->skimLightOn = on;
+	return previousState;
+}
+
+/*
+ * Turn shift light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setShiftLight(bool on) {
+	bool previousState = this->shiftLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->shiftLightOn = on;
+	return previousState;
+}
+
+/*
+ * Turn cruise light on or off.
+ *
+ * @access	public
+ * @param	boolean	True to turn on.
+ * @return	boolean	Previous on/off state.
+ */
+bool CCD::setCruiseLight(bool on) {
+	bool previousState = this->cruiseLightOn;
+	if (on != previousState) {
+		this->needsUpdateLights = true;
+	}
+	this->cruiseLightOn = on;
+	return previousState;
+}
+
+/*
  * Set new coolant temperature
  *
  * @access	public
@@ -133,7 +229,7 @@ void CCD::setCoolantTemperature(float tempF) {
 }
 
 /*
- * Do updates to CDD bus.
+ * Do updates to CCD bus.
  *
  * @access	public
  * @return	boolean	Update performed.
@@ -156,8 +252,14 @@ bool CCD::doUpdates() {
 	delay(50);
 
 	if (this->needsUpdateHealth) {
+		//XJ gauge clusters continually hold the last known value.
 		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0x00);
 		this->needsUpdateHealth = false;
+		didUpdates = true;
+	}
+
+	if (this->needsUpdateLights) {
+		this->doUpdateLights();
 		didUpdates = true;
 	}
 
@@ -165,10 +267,33 @@ bool CCD::doUpdates() {
 }
 
 /*
- * Do updates to CDD bus.
+ * Do updates to CCD bus for status lights only.
+ *
+ * @access	public
+ * @return	void
+ */
+void CCD::doUpdateLights() {
+	this->busTransmit(SHIFT_CRUISE_LIGHT_ID, 2, this->boolToLight(this->shiftLightOn), this->boolToLight(this->cruiseLightOn));
+	delay(50);
+	this->busTransmit(SKIM_LIGHT_ID, 1, this->boolToLight(this->skimLightOn));
+	delay(50);
+	this->busTransmit(CG_LIGHT_ID, 2, this->boolToLight(this->checkGaugesLightOn), 0x00);
+	delay(50);
+	this->busTransmit(CE_LIGHT_ID, 2, this->boolToLight(this->checkEngineLightOn), 0x00);
+	delay(50);
+	if (this->airBagLightOn) {
+		this->busTransmit(AIRBAG_BAD_ID, 1, 0xFF);
+	} else {
+		this->busTransmit(AIRBAG_GOOD_ID, 1, 0xFF);
+	}
+	this->needsUpdateLights = false;
+}
+
+/*
+ * Transmit to the serial port.
  *
  * @access	private
- * @return	boolean	Update performed.
+ * @return	void
  */
 void CCD::busTransmit(int id, int numBytes, ...) {
 	va_list bytes;
@@ -190,4 +315,17 @@ void CCD::busTransmit(int id, int numBytes, ...) {
 	Serial.println(checksum, HEX);
 	checksum = checksum & 0xFF;
 	this->ccdBus.write(checksum);
+}
+
+/*
+ * Turn a boolean into 0 or 255 to turn a light off or on.
+ *
+ * @access	private
+ * @return	integer	0 or 255
+ */
+int CCD::boolToLight(bool on) {
+	if (on) {
+		return 255;
+	}
+	return 0;
 }

@@ -53,7 +53,7 @@ ID - 0x000000
 #define TRIP_DIST_ID (0xEE)
 
 /*
-ID - Shift Light - ??
+ID - Shift Light - Cruise Control
 Shift Light = 0x00 off, 0xFF on
 Cruise Light = 0x00 off, 0xFF on
 */

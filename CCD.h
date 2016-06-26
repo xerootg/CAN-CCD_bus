@@ -10,7 +10,14 @@ public:
 	void setOilPSI(float oilPsi);
 	void setVoltage(float voltage);
 	void setCoolantTemperature(float tempF);
+	bool setCheckEngineLight(bool on);
+	bool setCheckGaugesLight(bool on);
+	bool setAirBagLight(bool on);
+	bool setSKIMLight(bool on);
+	bool setShiftLight(bool on);
+	bool setCruiseLight(bool on);
 	bool doUpdates();
+	void doUpdateLights();
 private:
 	HardwareSerial ccdBus;
 	const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
@@ -24,5 +31,13 @@ private:
 	bool needsUpdateRPM = false;
 	bool needsUpdateSpeed = false;
 	bool needsUpdateHealth = false;
+	bool needsUpdateLights = false;
+	bool checkEngineLightOn = false;
+	bool checkGaugesLightOn = false;
+	bool airBagLightOn = true;
+	bool skimLightOn = false;
+	bool shiftLightOn = false;
+	bool cruiseLightOn = false;
 	void busTransmit(int id, int numBytes, ...);
+	int boolToLight(bool on);
 };
