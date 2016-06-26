@@ -41,7 +41,7 @@ String dataIn;
 char CR = 10;
 byte volts = 0x70;
 byte psi = 0x30;
-byte temp = 0xA0;
+byte tempF = 0xA0;
 byte rpm = 0x25;
 void loop() {
 	delay(50);
@@ -49,10 +49,10 @@ void loop() {
 
 	if (Serial.available() > 0) {
 		dataIn = Serial.readStringUntil(CR);
-		temp = coolTempToCcdByte(dataIn.toFloat());
+		tempF = coolTempToCcdByte(dataIn.toFloat());
 	}
 	delay(50);
-	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, volts, psi, temp, 0x00);
+	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, volts, psi, tempF, 0x00);
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);
@@ -108,7 +108,18 @@ byte oilPsiToCcdByte(float psi) {
 	return constrain(psi * 2, 0, 255);
 }
 
-byte coolTempToCcdByte(float temp) {
+byte coolTempToCcdByte(float tempF) {
+	byte hex = 0xC1; //193 - Also, fail safe to alerting in the red for temperature.
+	//If you are looking at this code for temperature ranges and thinking, "WTF", so am I.
+	if (tempF < 100) {
+		hex = 0x00;
+	} else if (tempF >= 100 && tempF <= 210) {
+		hex = ((tempF - 100) * 0.54545455) + 105;
+	} else if (tempF > 210 && tempF < 223) {
+		hex = ((tempF - 210) * 1.6) + 165;
+	} else if (tempF >= 223 && tempF < 248) {
+		hex = 0xBC; //188
+	}
 	//float tempC = (tempF - 32) * 5 / 9;
-	return constrain(temp, 0, 255);
+	return constrain(hex, 0, 255);
 }

@@ -102,13 +102,8 @@ ID - Voltage - Oil PSI - Coolant Temperature
 Voltage = Value / 8  Example: 112 / 8 = 14 volts
 Oil PSI = Value / 2  Example: 160 / 2 = 80 PSI
 Coolant Temperature = Uhhhh?  The scaling on XJ cluster is fucky.
-145(0x91) = 180ºF displayed
-145(0x96) = 182.5ºF displayed
-165(0xA5) = 210ºF displayed
-185(0xB9) = 220ºF displayed, so 2 decimal = 1ºF
-188 to 192 = 250ºF displayed, automatically the "engine doesn't feel so good" reading.
-193 or higher = 260ºF displayed, "OH SHIT".  Value has to drop to 191 past 192 to back to 250ºF.
-Value * 0.78571429  Example: 210 * 0.78571429
+*ºF: 100--127.5--155--182.5--210--222.5--235--247.5--260
+DEC: 105--120----135--150----165--185----N/A--188+---193
 */
 #define VOLTS_OILPSI_COOLTEMP_ID (0x0C)
 
