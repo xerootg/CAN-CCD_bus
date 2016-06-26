@@ -2,6 +2,7 @@
 
 #include <FlexCAN.h>
 #include "CCDCodes.h"
+#include "CCD.h"
 
 const boolean debug = true;
 
