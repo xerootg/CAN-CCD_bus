@@ -8,13 +8,12 @@ const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7
 //FlexCAN canBus;
 HardwareSerial& ccdBus = Serial1;
 
-byte buffer;
-
 void setup() {
 	pinMode(led, OUTPUT);
 	digitalWrite(led, HIGH);
 
 	if (debug) {
+		delay(1000);
 		Serial.println(F("CCD-CAN Bus"));
 	}
 
@@ -31,31 +30,29 @@ void setup() {
 		digitalWrite(led, LOW);
 	}*/
 
-	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 0x00, 0x00, 0x00, 0x00);
+	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, 0x70, 0x30, 0xA0, 0x00);
 
-	/*delay(100);
+	delay(50);
 
-	Serial1.write(AIRBAG_GOOD_ID);
-	Serial1.write(0xFF);
-	Serial1.write(checksum(AIRBAG_GOOD_ID, byte[1]{0xFF}));
-	Serial1.flush();
-
-	delay(100);
-
-	Serial1.write(CG_LIGHT_ID);
-	Serial1.write(0x00);
-	Serial1.write(checksum(CG_LIGHT_ID, byte[1]{0x00}));
-	Serial1.flush();
-
-	delay(100);
-
-	Serial1.write(CE_LIGHT_ID);
-	Serial1.write(0x00);
-	Serial1.write(checksum(CE_LIGHT_ID, byte[1]{0x00}));
-	Serial1.flush();*/
+	ccdBusTx(AIRBAG_GOOD_ID, 1, 0xFF);
 }
 
+String dataIn;
+char CR = 10;
+byte volts = 0x70;
+byte psi = 0x30;
+byte temp = 0xA0;
+byte rpm = 0x25;
 void loop() {
+	delay(50);
+	ccdBusTx(RPM_MAP_ID, 2, rpm, 0x00);
+
+	if (Serial.available() > 0) {
+		dataIn = Serial.readStringUntil(CR);
+		temp = coolTempToCcdByte(dataIn.toFloat());
+	}
+	delay(50);
+	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, volts, psi, temp, 0x00);
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);
@@ -81,18 +78,37 @@ void loop() {
 	}*/
 }
 
-void ccdBusTx(byte id, ...) {
+void ccdBusTx(byte id, int numBytes, ...) {
 	va_list bytes;
-	va_start(bytes, id);
+	va_start(bytes, numBytes);
 
 	byte checksum = id;
 	ccdBus.write(id);
-	for (size_t i = 0; i < sizeof(bytes); ++i) {
+	for (int i = 0; i < numBytes; ++i) {
 		byte toSend = va_arg(bytes, int);
 		ccdBus.write(toSend);
 		checksum += toSend;
 	}
 
+	va_end(bytes);
+
 	checksum = checksum & 0xFF;
 	ccdBus.write(checksum);
+}
+
+byte rpmToCcdByte(int rpm) {
+	return constrain(rpm / 32, 0, 255);
+}
+
+byte voltsToCcdByte(float volts) {
+	return constrain(volts * 8, 0, 255);
+}
+
+byte oilPsiToCcdByte(float psi) {
+	return constrain(psi * 2, 0, 255);
+}
+
+byte coolTempToCcdByte(float temp) {
+	//float tempC = (tempF - 32) * 5 / 9;
+	return constrain(temp, 0, 255);
 }
