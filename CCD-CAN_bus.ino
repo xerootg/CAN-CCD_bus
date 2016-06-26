@@ -9,7 +9,7 @@ const boolean debug = true;
 const int led = LED_BUILTIN;
 const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
 //FlexCAN canBus;
-HardwareSerial& ccdBus = Serial1;
+CCD ccdBus;
 
 void setup() {
 	pinMode(led, OUTPUT);
@@ -20,7 +20,7 @@ void setup() {
 		Serial.println(F("CCD-CAN Bus"));
 	}
 
-	ccdBus.begin(ccdBaud);
+	ccdBus.init(Serial1);
 
 	/*int speedIndex = canBus.connect();
 	if (debug) {
@@ -33,30 +33,25 @@ void setup() {
 		digitalWrite(led, LOW);
 	}*/
 
-	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 4, 0x70, 0x30, 0xA0, 0x00);
-
-	delay(50);
-
-	ccdBusTx(AIRBAG_GOOD_ID, 1, 0xFF);
+	ccdBus.setVoltage(14);
+	ccdBus.setOilPSI(35);
+	ccdBus.setCoolantTemperature(210);
+	ccdBus.doUpdates();
 }
 
 String dataIn;
 char CR = 10;
-byte volts = 0x70;
-byte psi = 0x30;
-byte tempF = 0xA0;
-byte rpm = 0x25;
-byte speed = 0x00;
 void loop() {
 	delay(50);
-	ccdBusTx(RPM_MAP_ID, 2, rpm, 0x00);
+	ccdBus.setRPM(800 + random(0, 50));
+	ccdBus.doUpdates();
 
-	if (Serial.available() > 0) {
+	/*if (Serial.available() > 0) {
 		dataIn = Serial.readStringUntil(CR);
 		speed = speedToCcdByte(dataIn.toFloat());
 	}
 	delay(50);
-	ccdBusTx(SPEED_ID, 2, speed, speed);
+	ccdBusTx(SPEED_ID, 2, speed, speed);*/
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);
@@ -80,54 +75,4 @@ void loop() {
 			Serial.println(rxmsg.timestamp);
 		}
 	}*/
-}
-
-void ccdBusTx(byte id, int numBytes, ...) {
-	va_list bytes;
-	va_start(bytes, numBytes);
-
-	byte checksum = id;
-	ccdBus.write(id);
-	for (int i = 0; i < numBytes; ++i) {
-		byte toSend = va_arg(bytes, int);
-		ccdBus.write(toSend);
-		checksum += toSend;
-	}
-
-	va_end(bytes);
-
-	checksum = checksum & 0xFF;
-	ccdBus.write(checksum);
-}
-
-byte speedToCcdByte(float speed) {
-	return constrain(speed * SPEED_MULTIPLIER, 0, 255);
-}
-
-byte rpmToCcdByte(int rpm) {
-	return constrain(rpm / 32, 0, 255);
-}
-
-byte voltsToCcdByte(float volts) {
-	return constrain(volts * 8, 0, 255);
-}
-
-byte oilPsiToCcdByte(float psi) {
-	return constrain(psi * 2, 0, 255);
-}
-
-byte coolTempToCcdByte(float tempF) {
-	byte hex = 0xC1; //193 - Also, fail safe to alerting in the red for temperature.
-	//If you are looking at this code for temperature ranges and thinking, "WTF", so am I.
-	if (tempF < 100) {
-		hex = 0x00;
-	} else if (tempF >= 100 && tempF <= 210) {
-		hex = ((tempF - 100) * 0.54545455) + 105;
-	} else if (tempF > 210 && tempF < 223) {
-		hex = ((tempF - 210) * 1.6) + 165;
-	} else if (tempF >= 223 && tempF < 248) {
-		hex = 0xBC; //188
-	}
-	//float tempC = (tempF - 32) * 5 / 9;
-	return constrain(hex, 0, 255);
 }

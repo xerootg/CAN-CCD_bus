@@ -9,10 +9,21 @@
  * Constructor
  *
  * @access	public
+ * @return	void
+ */
+CCD::CCD() {
+	//Nothing.
+}
+
+/*
+ * Constructor
+ *
+ * @access	public
  * @param	object	HardwareSerial reference - Typically Serial1 on Arduino and Teensy
  * @return	void
  */
-CCD::CCD(HardwareSerial& serial) : ccdBus(serial) {
+void CCD::init(HardwareSerial& serial) {
+	this->ccdBus = serial;
 	this->ccdBus.begin(this->ccdBaud);
 }
 
@@ -135,10 +146,14 @@ bool CCD::doUpdates() {
 	this->needsUpdateRPM = false;
 	didUpdates = true;
 
+	delay(50);
+
 	//Speed also has to be updated within about three seconds or it falls back to zero.
 	this->busTransmit(SPEED_ID, 2, this->mph, this->kph);
 	this->needsUpdateSpeed = false;
 	didUpdates = true;
+
+	delay(50);
 
 	if (this->needsUpdateHealth) {
 		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0x00);
@@ -160,15 +175,19 @@ void CCD::busTransmit(int id, int numBytes, ...) {
 	va_start(bytes, numBytes);
 
 	int checksum = id;
+	Serial.print("SEND: ");
+	Serial.println(id, HEX);
 	this->ccdBus.write(id);
+	Serial.println(numBytes);
 	for (int i = 0; i < numBytes; ++i) {
 		int toSend = va_arg(bytes, int);
 		this->ccdBus.write(toSend);
+		Serial.println(toSend, HEX);
 		checksum += toSend;
 	}
 
 	va_end(bytes);
-
+	Serial.println(checksum, HEX);
 	checksum = checksum & 0xFF;
 	this->ccdBus.write(checksum);
 }
