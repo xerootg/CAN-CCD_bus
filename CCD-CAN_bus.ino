@@ -1,134 +1,98 @@
 #include <FlexCAN.h>
-#include <kinetis_flexcan.h>
-#include <Metro.h>
 #include "CCDCodes.h"
 
-//Metro sysTimer = Metro(1);// milliseconds
+const boolean debug = true;
 
 const int led = LED_BUILTIN;
-const float baud = 7812;
-//FlexCAN CANbus(7812.5);
+const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
+//FlexCAN canBus;
+HardwareSerial& ccdBus = Serial1;
 
-byte sentbyte;
-unsigned long prevmillis;
-byte testbyte=0x00;
-
-byte question = ECHO_ID;
-byte checksum = ECHO_ID;
+byte buffer;
 
 void setup() {
-	//CANbus.begin();
 	pinMode(led, OUTPUT);
 	digitalWrite(led, HIGH);
 
-	delay(1000);
-	Serial.println(F("CCD-CAN Bus Test"));
+	if (debug) {
+		Serial.println(F("CCD-CAN Bus"));
+	}
 
-	Serial1.begin(baud);
+	ccdBus.begin(ccdBaud);
 
-	delay(500);
+	/*int speedIndex = canBus.connect();
+	if (debug) {
+		Serial.print("Speed Index -> ");
+		Serial.println(speedIndex);
+	}
+	if (speedIndex != 255) {
+		digitalWrite(led, HIGH);
+	} else {
+		digitalWrite(led, LOW);
+	}*/
 
-	question = VOLTS_OILPSI_COOLTEMP_ID;
-	checksum = (question + 0x70 + 0x5F + 0x64 + 0x45) & 0xFF;
-	Serial1.write(question);
-	Serial1.write(0x70);
-	Serial1.write(0x5F);
-	Serial1.write(0x64);
-	Serial1.write(0x45);
-	Serial1.write(checksum);
-	Serial1.flush();
+	ccdBusTx(VOLTS_OILPSI_COOLTEMP_ID, 0x00, 0x00, 0x00, 0x00);
 
-	delay(100);
+	/*delay(100);
 
-	question = AIRBAG_GOOD_ID;
-	checksum = (question + 0xFF) & 0xFF;
-	Serial1.write(question);
+	Serial1.write(AIRBAG_GOOD_ID);
 	Serial1.write(0xFF);
-	Serial1.write(checksum);
+	Serial1.write(checksum(AIRBAG_GOOD_ID, byte[1]{0xFF}));
 	Serial1.flush();
 
 	delay(100);
 
-	question = CG_LIGHT_ID;
-	checksum = (question + 0x00) & 0xFF;
-	Serial1.write(question);
+	Serial1.write(CG_LIGHT_ID);
 	Serial1.write(0x00);
-	Serial1.write(checksum);
+	Serial1.write(checksum(CG_LIGHT_ID, byte[1]{0x00}));
 	Serial1.flush();
 
 	delay(100);
 
-	question = CE_LIGHT_ID;
-	checksum = (question + 0x00) & 0xFF;
-	Serial1.write(question);
+	Serial1.write(CE_LIGHT_ID);
 	Serial1.write(0x00);
-	Serial1.write(checksum);
-	Serial1.flush();
+	Serial1.write(checksum(CE_LIGHT_ID, byte[1]{0x00}));
+	Serial1.flush();*/
 }
 
 void loop() {
-	for (int i = 0; i <= 255; ++i) {
-		Serial.println(testbyte, HEX);
-		Serial.println(i, HEX);
-		question = RPM_MAP_ID;
-		checksum = (question + i + i) & 0xFF;
-		Serial1.write(question);
-		Serial1.write(i);
-		Serial1.write(i);
-		Serial1.write(checksum);
-		Serial1.flush();
-		delay(50);
-	}
-
-	digitalWrite(led, LOW);
-	delay(50);
-	digitalWrite(led, HIGH);
-
-	if (Serial1.availableForWrite()) {
-		//RPM/MAP Swinger
-		/*byte checksum = (RPM_MAP_ID + testbyte + testbyte) & 0xFF;
-		Serial1.write(RPM_MAP_ID);
-		Serial1.write(testbyte);
-		Serial1.write(testbyte);
-		Serial1.write(checksum);
-		testbyte = testbyte + 5;
-		//Serial.println(testbyte);*/
-
-		//Brute Force IDs
-		/*byte checksum = (testbyte + 0xD7 + 0x8D) & 0xFF;
-		Serial1.write(testbyte);
-		Serial1.write(0xD7);
-		Serial1.write(0x8D);
-		Serial1.write(checksum);
-		Serial1.flush();
-		Serial.println("--");
-		Serial.println(testbyte, HEX);*/
-	}
-	//Serial.println("0xFF");
-	/*checksum = (question + 0xFF + 0xFF + 0xFF + 0xFF) & 0xFF;
-	Serial1.write(question);
-	Serial1.write(0xFF);
-	Serial1.write(0xFF);
-	Serial1.write(0xFF);
-	Serial1.write(0xFF);
-	Serial1.write(checksum);*/
-	testbyte = testbyte + 1;
+	/*if (rx == true) {
+		if (1 == can.available()) {
+			can.read(rxmsg);
+			Serial.print("PID: ");
+			Serial.print(rxmsg.id, HEX);
+			Serial.print(" Data:");
+			for (int x = 0; x < rxmsg.len; x ++) {
+				Serial.print(" ");
+				if (rxmsg.req == 0) {
+					if (rxmsg.buf[x] < 10) {
+						Serial.print("0");
+					}
+					Serial.print(rxmsg.buf[x], HEX);
+				} else {
+					Serial.print("00");
+				}
+			}
+			Serial.print(" Request: ");
+			Serial.print(rxmsg.req);
+			Serial.print(" Timestamp: ");
+			Serial.println(rxmsg.timestamp);
+		}
+	}*/
 }
 
-byte buffer;
-void serialEvent1() {
-	buffer = Serial1.read();
-	//Serial.println(buffer, HEX);
-}
+void ccdBusTx(byte id, ...) {
+	va_list bytes;
+	va_start(bytes, id);
 
-/*void checksum(byte id, ...) {
-    va_list vl;
-    va_start(vl, id);
-    int max = va_arg(vl, int);
-    for(int i = 2; i <= n_args; i++) {
-        int a = va_arg(ap, int);
-        if(a > max) max = a;
-    }
-    va_end(ap);
-    return max;
-}*/
+	byte checksum = id;
+	ccdBus.write(id);
+	for (size_t i = 0; i < sizeof(bytes); ++i) {
+		byte toSend = va_arg(bytes, int);
+		ccdBus.write(toSend);
+		checksum += toSend;
+	}
+
+	checksum = checksum & 0xFF;
+	ccdBus.write(checksum);
+}
