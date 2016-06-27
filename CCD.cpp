@@ -16,7 +16,7 @@ CCD::CCD() {
 }
 
 /*
- * Constructor
+ * Initialize serial bus and other necessary information.
  *
  * @access	public
  * @param	object	HardwareSerial reference - Typically Serial1 on Arduino and Teensy
