@@ -13,7 +13,6 @@ CCD ccdBus;
 
 void setup() {
 	pinMode(led, OUTPUT);
-	digitalWrite(led, HIGH);
 
 	if (debug) {
 		delay(1000);
@@ -22,16 +21,16 @@ void setup() {
 
 	ccdBus.init(Serial1);
 
-	/*int speedIndex = canBus.connect();
+	int speedIndex = canBus.connect();
 	if (debug) {
-		Serial.print("Speed Index -> ");
+		Serial.print("Speed Index: ");
 		Serial.println(speedIndex);
 	}
 	if (speedIndex != 255) {
 		digitalWrite(led, HIGH);
 	} else {
 		digitalWrite(led, LOW);
-	}*/
+	}
 
 	ccdBus.setVoltage(14);
 	ccdBus.setOilPSI(35);

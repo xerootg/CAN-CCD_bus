@@ -300,10 +300,7 @@ void CCD::busTransmit(int id, int numBytes, ...) {
 	va_start(bytes, numBytes);
 
 	int checksum = id;
-	Serial.print("SEND: ");
-	Serial.println(id, HEX);
 	this->ccdBus.write(id);
-	Serial.println(numBytes);
 	for (int i = 0; i < numBytes; ++i) {
 		int toSend = va_arg(bytes, int);
 		this->ccdBus.write(toSend);
@@ -312,7 +309,6 @@ void CCD::busTransmit(int id, int numBytes, ...) {
 	}
 
 	va_end(bytes);
-	Serial.println(checksum, HEX);
 	checksum = checksum & 0xFF;
 	this->ccdBus.write(checksum);
 }
