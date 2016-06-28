@@ -11,6 +11,9 @@ const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7
 FlexCAN canBus;
 CCD ccdBus;
 
+float lastMPH = 0;
+unsigned long lastMillis = 0;
+
 void setup() {
 	pinMode(led, OUTPUT);
 
@@ -21,7 +24,7 @@ void setup() {
 
 	ccdBus.init(Serial1);
 
-	int speedIndex = canBus.connect();
+	/*int speedIndex = canBus.connect();
 	if (debug) {
 		Serial.print("Speed Index: ");
 		Serial.println(speedIndex);
@@ -30,7 +33,7 @@ void setup() {
 		digitalWrite(led, HIGH);
 	} else {
 		digitalWrite(led, LOW);
-	}
+	}*/
 
 	ccdBus.setVoltage(14);
 	ccdBus.setOilPSI(35);
@@ -42,6 +45,8 @@ void setup() {
 	ccdBus.setShiftLight(true);
 	ccdBus.setCruiseLight(true);*/
 	ccdBus.doUpdates();
+
+	lastMillis = millis();
 }
 
 String dataIn;

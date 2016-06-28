@@ -253,7 +253,7 @@ bool CCD::doUpdates() {
 
 	if (this->needsUpdateHealth) {
 		//XJ gauge clusters continually hold the last known value.
-		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0x00);
+		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0xFF);
 		this->needsUpdateHealth = false;
 		didUpdates = true;
 	}
