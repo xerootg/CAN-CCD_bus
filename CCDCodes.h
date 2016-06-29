@@ -54,7 +54,7 @@ ID - 0x000000
 
 /*
 ID - Shift Light - Cruise Control
-The payload is two bytes long with each bit indiciating a different message.  Originally I thought that each byte controlled actually one function, but that assumption was wrong after prompts from laszlodaniel that 0xA4 was being used for more than two functions.  Some single bits control individual features.  However, in the case of the "shift up" light for manual transmissions I have only been able to toggle it by setting the first four bites of the first byte to on.
+The payload is two bytes long with each bit indicating a different message.  Originally I thought that each byte controlled actually one function, but that assumption was wrong after prompts from laszlodaniel that 0xA4 was being used for more than two functions.  Some single bits control individual features.  However, in the case of the "shift up" light for manual transmissions I have only been able to toggle it by setting the first four bites of the first byte to on.
 So far:
 First byte:
 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
