@@ -45,24 +45,27 @@ void setup() {
 	ccdBus.setShiftLight(true);
 	ccdBus.setCruiseLight(true);*/
 	ccdBus.doUpdates();
-
 	lastMillis = millis();
 }
 
 String dataIn;
 char CR = 10;
 float rpm = 800;
+byte bitfield = 0x00;
 void loop() {
 	delay(50);
 
 	if (Serial.available() > 0) {
 		dataIn = Serial.readStringUntil(CR);
-		rpm = dataIn.toFloat();
+		bitfield = dataIn.toInt();
+		Serial.println(bitfield, HEX);
 	}
 
 	ccdBus.setRPM(rpm + random(0, 50));
 	ccdBus.doUpdates();
 
+	delay(100);
+	ccdBus.busTransmit(FEATURE_STATUS_ID, 2, bitfield, bitfield);
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);

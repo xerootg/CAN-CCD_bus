@@ -273,7 +273,8 @@ bool CCD::doUpdates() {
  * @return	void
  */
 void CCD::doUpdateLights() {
-	this->busTransmit(SHIFT_CRUISE_LIGHT_ID, 2, this->boolToLight(this->shiftLightOn), this->boolToLight(this->cruiseLightOn));
+	//@TODO: Fix feature status to assemble bits correctly.
+	this->busTransmit(FEATURE_STATUS_ID, 2, this->boolToLight(this->shiftLightOn), this->boolToLight(this->cruiseLightOn));
 	delay(50);
 	this->busTransmit(SKIM_LIGHT_ID, 1, this->boolToLight(this->skimLightOn));
 	delay(50);
@@ -304,7 +305,6 @@ void CCD::busTransmit(int id, int numBytes, ...) {
 	for (int i = 0; i < numBytes; ++i) {
 		int toSend = va_arg(bytes, int);
 		this->ccdBus.write(toSend);
-		Serial.println(toSend, HEX);
 		checksum += toSend;
 	}
 
