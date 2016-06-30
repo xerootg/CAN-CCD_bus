@@ -1,8 +1,7 @@
 #define XJ_PLATFORM true
 
-#include <FlexCAN.h>
-#include "CCDCodes.h"
 #include "CCD.h"
+#include "CAN.h"
 
 const boolean debug = true;
 
@@ -64,8 +63,8 @@ void loop() {
 	ccdBus.setRPM(rpm + random(0, 50));
 	ccdBus.doUpdates();
 
-	delay(100);
-	ccdBus.busTransmit(FEATURE_STATUS_ID, 2, bitfield, bitfield);
+	//delay(100);
+	//ccdBus.busTransmit(FEATURE_STATUS_ID, 2, bitfield, bitfield);
 	/*if (rx == true) {
 		if (1 == can.available()) {
 			can.read(rxmsg);

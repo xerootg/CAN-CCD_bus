@@ -2,7 +2,6 @@
 
 class CCD {
 public:
-	CCD();
 	void init(HardwareSerial& serial);
 	void setRPM(float rpm);
 	void setMPH(float mph);
@@ -18,7 +17,6 @@ public:
 	bool setCruiseLight(bool on);
 	bool doUpdates();
 	void doUpdateLights();
-	void busTransmit(int id, int numBytes, ...);
 private:
 	HardwareSerial ccdBus;
 	const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
@@ -39,5 +37,6 @@ private:
 	bool skimLightOn = false;
 	bool shiftLightOn = false;
 	bool cruiseLightOn = false;
+	void busTransmit(int id, int numBytes, ...);
 	int boolToLight(bool on);
 };

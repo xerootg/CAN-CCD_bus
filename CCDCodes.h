@@ -57,16 +57,14 @@ ID - Shift Light - Cruise Control
 The payload is two bytes long with each bit indicating a different message.  Originally I thought that each byte controlled actually one function, but that assumption was wrong after prompts from laszlodaniel that 0xA4 was being used for more than two functions.  Some single bits control individual features.  However, in the case of the "shift up" light for manual transmissions I have only been able to toggle it by setting the first four bites of the first byte to on.
 So far:
 First byte:
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-|---|---|---|---|---|---|---|---|
-|   |   |   |   |   |   |   |   |
-|---|---|---|---|---|---|---|---|
-|  Shift Light  |   |   |   |   |
+|              | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+|--------------|---|---|---|---|---|---|---|---|
+| Shift Light  | 1 |   |   | 1 |   |   |   |   | 0x90 - Note: One of these bits might be the transmission type identifier and be required for the shift light to also work.
 
 Second byte:
-| 0 | 0 | 0 | 0 | 0 |       0      | 0 | 0 |
-|---|---|---|---|---|--------------|---|---|
-|   |   |   |   |   | Cruise Light |   |   |
+|              | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+|--------------|---|---|---|---|---|---|---|---|
+| Cruise Light |   |   |   |   |   | 1 |   |   | 0x08
 */
 #define FEATURE_STATUS_ID (0xA4)
 

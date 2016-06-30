@@ -6,16 +6,6 @@
 #include <Math.h>
 
 /*
- * Constructor
- *
- * @access	public
- * @return	void
- */
-CCD::CCD() {
-	//Nothing.
-}
-
-/*
  * Initialize serial bus and other necessary information.
  *
  * @access	public
