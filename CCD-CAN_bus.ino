@@ -6,8 +6,7 @@
 const boolean debug = true;
 
 const int led = LED_BUILTIN;
-const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
-//FlexCAN canBus;
+HaltechCAN canBus;
 CCD ccdBus;
 
 float lastMPH = 0;
@@ -23,16 +22,11 @@ void setup() {
 
 	ccdBus.init(Serial1);
 
-	/*int speedIndex = canBus.connect();
-	if (debug) {
-		Serial.print("Speed Index: ");
-		Serial.println(speedIndex);
-	}
-	if (speedIndex != 255) {
+	if (canBus.init()) {
 		digitalWrite(led, HIGH);
 	} else {
 		digitalWrite(led, LOW);
-	}*/
+	}
 
 	ccdBus.setVoltage(14);
 	ccdBus.setOilPSI(35);

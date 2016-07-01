@@ -1,17 +1,15 @@
 #include "CAN.h"
-#include <FlexCAN.h>
 
 class HaltechCAN: public CAN {
 public:
-	void init();
-	float getRPM() = 0;
-	float getMPH() = 0;
-	float getKPH() = 0;
-	float getOilPSI() = 0;
-	float getVoltage() = 0;
-	float getCoolantTemperature() = 0;
-	bool getCheckEngineLight() = 0;
-	bool getCheckGaugesLight() = 0;
+	float getRPM();
+	float getMPH();
+	float getKPH();
+	float getOilPSI();
+	float getVoltage();
+	float getCoolantTemperature();
+	bool getCheckEngineLight();
+	bool getCheckGaugesLight();
 	bool getUpdates();
 	void busRecieve();
 private:
