@@ -1,13 +1,13 @@
 #define XJ_PLATFORM true
 
-#include "CCD.h"
-#include "CAN.h"
+#include "include/CCD/CCD.h"
+#include "include/CAN/HaltechCAN.h"
 
 const boolean debug = true;
 
 const int led = LED_BUILTIN;
 const int ccdBaud = 7812; //Due to how AVRs work this ends up being the needed 7812.5 assuming the MHz has no remainder when divided by 1.
-FlexCAN canBus;
+//FlexCAN canBus;
 CCD ccdBus;
 
 float lastMPH = 0;

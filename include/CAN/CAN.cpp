@@ -12,10 +12,10 @@ void CAN::init() {
 	
 }
 
-bool getUpdates() {
+bool CAN::getUpdates() {
 	return true;
 }
 
-void busRecieve() {
+void CAN::busRecieve() {
 	
 }
