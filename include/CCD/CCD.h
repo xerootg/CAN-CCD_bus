@@ -15,6 +15,7 @@ public:
 	bool setSKIMLight(bool on);
 	bool setShiftLight(bool on);
 	bool setCruiseLight(bool on);
+	void busTransmit(int id, int numBytes, ...);
 	bool doUpdates();
 	void doUpdateLights();
 private:
@@ -37,6 +38,5 @@ private:
 	bool skimLightOn = false;
 	bool shiftLightOn = false;
 	bool cruiseLightOn = false;
-	void busTransmit(int id, int numBytes, ...);
 	int boolToLight(bool on);
 };

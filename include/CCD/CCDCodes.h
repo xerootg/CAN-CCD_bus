@@ -65,6 +65,19 @@ Second byte:
 |              | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 |--------------|---|---|---|---|---|---|---|---|
 | Cruise Light |   |   |   |   |   | 1 |   |   | 0x08
+
+Additional features controlled, but undetermined what their positions are yet:
+* A/C Clutch Engaged
+* A/C EMCC Request
+* Brake Pedal - I assume this means the brake pedal switched is triggerred.
+* Emission Reminder/Status Light
+* Engine Light Status - This is duplicated on 0xF5 as such, this might be for OBD-I.
+* "SC" Override
+* Torque Converter Lockup
+* Transmission in Park/Neutral
+* Transmission Type(See note on Shift Light bit field above.)
+* Lock Door Request
+* Water in Fuel (Diesel)
 */
 #define FEATURE_STATUS_ID (0xA4)
 

@@ -246,6 +246,10 @@ bool CCD::doUpdates() {
 		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0xFF);
 		this->needsUpdateHealth = false;
 		didUpdates = true;
+
+		if (this->needsUpdateLights) {
+			delay(50);
+		}
 	}
 
 	if (this->needsUpdateLights) {

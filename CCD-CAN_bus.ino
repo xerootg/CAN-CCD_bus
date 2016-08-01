@@ -28,25 +28,35 @@ void setup() {
 		digitalWrite(led, LOW);
 	}
 
+	ccdBus.busTransmit(0xEC, 2, 0x00, 0xFF);
+	delay(50);
+	ccdBus.busTransmit(0x25, 2, 0xFF, 0xFF);
+	delay(50);
+	ccdBus.busTransmit(0xB2, 2, 0x20, 0x14, 0x0B);
+	delay(50);
+
 	ccdBus.setVoltage(14);
 	ccdBus.setOilPSI(35);
 	ccdBus.setCoolantTemperature(210);
-	/*ccdBus.setAirBagLight(false);
-	ccdBus.setCheckGaugesLight(true);
-	ccdBus.setCheckEngineLight(true);
-	ccdBus.setSKIMLight(true);
-	ccdBus.setShiftLight(true);
-	ccdBus.setCruiseLight(true);*/
+	ccdBus.setAirBagLight(false);
+	ccdBus.setCheckGaugesLight(false);
+	ccdBus.setCheckEngineLight(false);
+	ccdBus.setSKIMLight(false);
+	ccdBus.setShiftLight(false);
+	ccdBus.setCruiseLight(false);
 	ccdBus.doUpdates();
 	lastMillis = millis();
 }
 
 String dataIn;
 char CR = 10;
-float rpm = 800;
+float rpm = 2500;
 byte bitfield = 0x00;
 void loop() {
 	delay(50);
+
+	/*byte inByte = (byte) Serial1.read();
+	Serial.println(inByte, HEX);*/
 
 	if (Serial.available() > 0) {
 		dataIn = Serial.readStringUntil(CR);
@@ -54,7 +64,9 @@ void loop() {
 		Serial.println(bitfield, HEX);
 	}
 
-	ccdBus.setRPM(rpm + random(0, 50));
+	ccdBus.setRPM(rpm + random(0, 10));
+	ccdBus.setMPH(55);
+	ccdBus.setKPH(85.5);
 	ccdBus.doUpdates();
 
 	//delay(100);
@@ -82,4 +94,11 @@ void loop() {
 			Serial.println(rxmsg.timestamp);
 		}
 	}*/
+}
+
+void serialEvent1() {
+	while (Serial1.available()) {
+		byte inByte = (byte) Serial1.read();
+		Serial.println(inByte, HEX);
+	}
 }
