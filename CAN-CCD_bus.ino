@@ -28,15 +28,9 @@ void setup() {
 		digitalWrite(led, LOW);
 	}
 
-	ccdBus.busTransmit(0xEC, 2, 0x00, 0xFF);
-	delay(50);
-	ccdBus.busTransmit(0x25, 2, 0xFF, 0xFF);
-	delay(50);
-	ccdBus.busTransmit(0xB2, 2, 0x20, 0x14, 0x0B);
-	delay(50);
-
 	ccdBus.setVoltage(14);
 	ccdBus.setOilPSI(35);
+	ccdBus.setFuelPercent(50);
 	ccdBus.setCoolantTemperature(210);
 	ccdBus.setAirBagLight(false);
 	ccdBus.setCheckGaugesLight(false);
@@ -94,11 +88,4 @@ void loop() {
 			Serial.println(rxmsg.timestamp);
 		}
 	}*/
-}
-
-void serialEvent1() {
-	while (Serial1.available()) {
-		byte inByte = (byte) Serial1.read();
-		Serial.println(inByte, HEX);
-	}
 }

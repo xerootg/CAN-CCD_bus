@@ -96,6 +96,21 @@ void CCD::setVoltage(float voltage) {
 }
 
 /*
+ * Set new fuel percentage.
+ *
+ * @access	public
+ * @param	float	Fuel Percentage
+ * @return	void
+ */
+void CCD::setFuelPercent(float fuelPercent) {
+	int newFuelPercent = round(constrain(254 * (fuelPercent / 100), 0, 254));
+	if (newFuelPercent != this->fuelPercent) {
+		this->fuelPercent = newFuelPercent;
+		this->needsUpdateFuelPercent = true;
+	}
+}
+
+/*
  * Turn check engine light on or off.
  *
  * @access	public
@@ -245,6 +260,16 @@ bool CCD::doUpdates() {
 		//XJ gauge clusters continually hold the last known value.
 		this->busTransmit(VOLTS_OILPSI_COOLTEMP_ID, 4, this->voltage, this->oilPsi, this->coolantTemperature, 0xFF);
 		this->needsUpdateHealth = false;
+		didUpdates = true;
+
+		if (this->needsUpdateFuelPercent) {
+			delay(50);
+		}
+	}
+
+	if (this->needsUpdateFuelPercent) {
+		this->busTransmit(FUEL_ID, 1, this->fuelPercent);
+		this->needsUpdateFuelPercent = false;
 		didUpdates = true;
 
 		if (this->needsUpdateLights) {

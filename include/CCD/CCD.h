@@ -8,6 +8,7 @@ public:
 	void setKPH(float kph);
 	void setOilPSI(float oilPsi);
 	void setVoltage(float voltage);
+	void setFuelPercent(float fuelPercent);
 	void setCoolantTemperature(float tempF);
 	bool setCheckEngineLight(bool on);
 	bool setCheckGaugesLight(bool on);
@@ -27,10 +28,12 @@ private:
 	int kph = 0x00;
 	int oilPsi = 0x00;
 	int voltage = 0x00;
+	int fuelPercent = 0x00;
 	int coolantTemperature = 0x00;
 	bool needsUpdateRPM = false;
 	bool needsUpdateSpeed = false;
 	bool needsUpdateHealth = false;
+	bool needsUpdateFuelPercent = false;
 	bool needsUpdateLights = false;
 	bool checkEngineLightOn = false;
 	bool checkGaugesLightOn = false;

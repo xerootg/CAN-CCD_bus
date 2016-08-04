@@ -39,6 +39,13 @@ Float target voltage = Value / 16
 #define VOLTAGE_ID (0xD4)
 
 /*
+ID - Fuel Percent
+Float fuel percent = Value / 254
+255 = Open sensor circuit
+*/
+#define FUEL_ID (0x25)
+
+/*
 Pre-OBD-II and/or export vehicles.
 ID - Coolant Temperature - Battery Temperature
 Coolant = Value - 128
