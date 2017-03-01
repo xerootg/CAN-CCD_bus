@@ -33,6 +33,87 @@ void CCD::setRPM(float rpm) {
 }
 
 /*
+* Set pulses recieved from the 8000pulse per mile sensor and store time since last update for speed calculation
+* 
+* @access public
+* @param int pulses
+* return void
+*/
+
+void CCD::setDistancePulses(int pulses) {
+	//if the gauges have not seen this count, need to add, else need to set
+	int newPulses;
+	if (!this->needsDistanceSet) {
+		newPulses = pulses;
+	}else{
+		newPulses = this->pulses + pulses;
+	}
+	//if the pulse count is greater than what is stored, update it and set the accumilitave time
+	if (newPulses > this->pulses) {
+		//need to figure out how long its been since pulses were last set
+		//this->pulseTime = millis of last bus update
+		//this->pulseMillis  = duration of pulses
+		//duration of pulses is current millis - lasst bus update
+		if (this->pulseTime == 0) { //unlikely 0 millis will have ever elapsed... so lets use that as an initial value
+			this->pulseTime = millis();
+		}
+		if (this->pulseTime > millis()) {//time rollover calculation, at 47ish days this becomes a concern. If my jeep ever runs that long straight i deserve the resulting error
+			this->pulseTime = millis();
+		}
+
+		this->pulseMillis = millis() - this->pulseTime; //millis since time was last updates
+		this->pulses = newPulses;
+		this->needsDistanceSet = true;
+		float millisInHour = 3600000.0;
+		float hours = this->pulseMillis / millisInHour;
+		float pulsesInMile = 8400.0;
+		float miles = newPulses / pulsesInMile;
+		float mph = miles / hours;
+		float kphInMph = 1.60934;
+		float kph = mph*kphInMph;
+		if (DEBUG) {
+			Serial.print(F("Setting speed: "));
+			Serial.print(String(this->pulseMillis));
+			Serial.print(F(" Hours: "));
+			Serial.print(String(hours, 20));
+			Serial.print(F(" Miles: "));
+			Serial.println(String(miles, 20));
+			Serial.print(F("Speed (MPH): "));
+			Serial.print(String(mph, 20));
+			Serial.print(F("Speed (KPH): "));
+			Serial.println(String(kph, 20));
+		}
+		setKPH(kph);
+	}
+}
+
+void CCD::doDistanceUpdates(void){
+	pulses = this->pulses;
+	if (DEBUG) {
+		Serial.print("Updating distance by ");
+		Serial.println(String(pulses));
+	}
+	 while (pulses > 0xff) {
+		 if (!this->busTransmit(DIST_INCR_ID, 2, 0x00, 0xff)) { //only subtract on sucess. False = sucess
+			 pulses = pulses - 0xff;
+		 }
+	 }
+	 while (pulses>0){
+		 if (!this->busTransmit(DIST_INCR_ID, 2, 0x00, pulses)) { //only subtract on sucess. False = sucess
+			 pulses = pulses - pulses;
+		 }
+	 }
+	
+	this->needsDistanceSet = false; //the distance has been set, kill it
+	if(!this->needsDistanceSet){
+		this->pulses = 0;
+		this->pulseTime = millis();
+	}
+
+}
+
+
+/*
  * Set new speed in miles per hour.
  *
  * @access	public
@@ -88,7 +169,7 @@ void CCD::setOilPSI(float oilPsi) {
  * @return	void
  */
 void CCD::setVoltage(float voltage) {
-	int newVoltage = round(constrain(voltage * 8, 0, 255));
+	int newVoltage = round(constrain((voltage+VOLTAGE_OFFSET) * 8, 0, 255));
 	if (newVoltage != this->voltage) {
 		this->voltage = newVoltage;
 		this->needsUpdateHealth = true;
@@ -269,6 +350,8 @@ bool CCD::doUpdates() {
 		didUpdates = true;
 	}
 
+	doDistanceUpdates();
+
 	return didUpdates;
 }
 
@@ -392,10 +475,14 @@ bool CCD::busTransmit(int id, int numBytes, ...) {
 	va_start(bytes, numBytes);
 	delay(50);
 	while (digitalReadFast(this->idlePin) != 1) {
-		Serial.println("idle");
+		if (DEBUG) {
+			Serial.println("idle");
+		}
 		delay(50);
 	}
-	Serial.println(F("Message begin"));
+	if (DEBUG) {
+		Serial.println(F("Message begin"));
+	}
 	this->ccdBus.clear();
 	int checksum = id;
 	this->ccdBus.write(id);
@@ -416,8 +503,9 @@ bool CCD::busTransmit(int id, int numBytes, ...) {
 
 	while (packetCount < bytesSent) {
 		if (this->ccdBus.available() > 0) {
-			Serial.print(String(this->ccdBus.read()));
-			Serial.print(F(" "));
+			//DEBUGGING
+			//Serial.print(String(this->ccdBus.read()));
+			//Serial.print(F(" "));
 			packetCount++;
 		}
 		else {
@@ -428,20 +516,26 @@ bool CCD::busTransmit(int id, int numBytes, ...) {
 			delayMicroseconds(1);
 		}
 	}
-	if (packetCount==bytesSent){
-		//Serial.print(String(packetCount));
-		//Serial.println(" bytes sent, packet GOOD");
+	if (packetCount == bytesSent) {
+		if (DEBUG) {
+		Serial.print(String(packetCount));
+		Serial.println(" bytes sent, packet GOOD");
+		}
 		return false;
 	}
 	else {
-		Serial.print(String(packetCount));
-		Serial.print(" bytes sent, expected ");
-		Serial.print(String(bytesSent));
-		Serial.println(" packet BAD");
+		if (DEBUG) {
+			Serial.print(String(packetCount));
+			Serial.print(" bytes sent, expected ");
+			Serial.print(String(bytesSent));
+			Serial.println(" packet BAD");
+		}
 		return true;
 	}
 	while (digitalRead(this->idlePin) != 0) {
-		Serial.println("not idle");
+		if (DEBUG) {
+			Serial.println("not idle");
+		}
 		delay(50);
 	}
 	

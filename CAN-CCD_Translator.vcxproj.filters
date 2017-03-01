@@ -27,6 +27,9 @@
     <ClInclude Include="CCDCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.CAN-CCD_bus.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCD.cpp">

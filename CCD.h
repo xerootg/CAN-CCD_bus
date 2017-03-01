@@ -1,5 +1,7 @@
 #include <HardwareSerial.h>
-#define SPEED_MULTIPLIER 1.3
+#define SPEED_MULTIPLIER .95
+#define VOLTAGE_OFFSET .25
+#define DEBUG false
 class CCD {
 public:
 	void init(HardwareSerial& serial, int pin);
@@ -16,9 +18,11 @@ public:
 	bool setSKIMLight(bool on);
 	bool setShiftLight(bool on);
 	bool setCruiseLight(bool on);
+	void setDistancePulses(int pulses);
 	bool busTransmit(int id, int numBytes, ...);
 	bool busTransmitValidate(int id, int numBytes, ...);
 	bool doUpdates();
+	void doDistanceUpdates();
 	void doUpdateLights();
 private:
 	HardwareSerial ccdBus;
@@ -28,6 +32,9 @@ private:
 	int idlePin = 0;
 	int mph = 0x00;
 	int kph = 0x00;
+	int pulses = 0;
+	int pulseTime = 0;
+	int pulseMillis = 0;
 	int oilPsi = 0x00;
 	int voltage = 0x00;
 	int fuelPercent = 0x00;
@@ -37,6 +44,7 @@ private:
 	bool needsUpdateHealth = false;
 	bool needsUpdateFuelPercent = false;
 	bool needsUpdateLights = false;
+	bool needsDistanceSet = false;
 	bool checkEngineLightOn = false;
 	bool checkGaugesLightOn = false;
 	bool airBagLightOn = true;
