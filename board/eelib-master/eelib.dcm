@@ -1,0 +1,15 @@
+EESchema-DOCLIB  Version 2.0  Date: Sun 02 Sep 2012 10:22:56 PM PDT
+#
+$CMP MCP2515
+D Standalone CAN controller with SPI interface
+$ENDCMP
+#
+$CMP MCP2551
+D 5V CAN Transceiver
+$ENDCMP
+#
+$CMP PIC32MX2XX
+D PIC32 Microcontroller. 28 pin SOIC, SSOP, and SPDIP packages
+$ENDCMP
+#
+#End Doc Library

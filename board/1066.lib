@@ -1,0 +1,34 @@
+EESchema-LIBRARY Version 2.3
+#encoding utf-8
+#(c) SnapEDA 2016 (snapeda.com)
+#This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA) with Design Exception 1.0
+#
+# 1066
+#
+DEF 1066 B 0 40 N N 1 L N
+F0 "B" -50 125 50 H V L CNN
+F1 "1066" -50 -200 50 H V L CNN
+F2 "1066" 0 0 50 H I L CNN
+F3 "1.24 USD" 0 0 50 H I L CNN "Price"
+F4 "None" 0 0 50 H I L CNN "Package"
+F5 "Coin Cell Holder; 20 mm; 0.896 in.; Glass Filled Nylon; Tin Plate; 1" 0 0 50 H I L CNN "Description"
+F6 "Keystone" 0 0 50 H I L CNN "MF"
+F7 "Good" 0 0 50 H I L CNN "Availability"
+F8 "1066" 0 0 50 H I L CNN "MP"
+DRAW
+P 2 0 0 16 -25 25 -25 0 N
+P 2 0 0 6 -100 0 -25 0 N
+P 2 0 0 16 -25 0 -25 -25 N
+P 2 0 0 16 25 100 25 -100 N
+P 2 0 0 16 75 25 75 -25 N
+P 2 0 0 16 125 100 125 0 N
+P 2 0 0 6 125 0 200 0 N
+P 2 0 0 16 125 0 125 -100 N
+T 0 150 25 60 0 0 0 + Normal 0 L B
+T 0 -75 25 60 0 0 0 - Normal 0 L B
+X + + 300 0 100 L 40 40 0 0 P 
+X - - -200 0 100 R 40 40 0 0 P 
+ENDDRAW
+ENDDEF
+#
+# End Library

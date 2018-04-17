@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name CDP68HC68S1)(type KiCad)(uri "$(KIPRJMOD)/CDP68HC68S1.pretty")(options "")(descr ""))
+  (lib (name w_battery_holders)(type KiCad)(uri "$(KIPRJMOD)/w_battery_holders.pretty")(options "")(descr ""))
+  (lib (name Teensy)(type KiCad)(uri "$(KIPRJMOD)/Teensy.pretty")(options "")(descr ""))
+  (lib (name mx150)(type KiCad)(uri "$(KIPRJMOD)/mx150.pretty")(options "")(descr ""))
+  (lib (name keystone_1067)(type KiCad)(uri "$(KIPRJMOD)/keystone_1067.pretty")(options "")(descr ""))
+)
