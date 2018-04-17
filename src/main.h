@@ -13,8 +13,8 @@
 #define OIL_PRESSURE_IN 16
 #define STEERING_WHEEL_IN 17
 #define ALTERNATOR_HEALTH_IN 23
-#define VSS_IN 30
-#define MISC_OUT 28 //TC4427 output
+#define VSS_IN 22
+#define MISC_OUT 21 //TC4427 output
 
 //Fuel level trims
 #define FUEL_MAX 1023
