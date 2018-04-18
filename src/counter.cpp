@@ -120,7 +120,7 @@ int Counter::getPulses(){
 void ftm0_isr(void){
   isr_ptr->setCount(); //one rotation has occured
   FTM0_CNT = 0x0000; // Reset count value
-  isr_ptr->setTime(FTM0_C0V);   //TODO might be in nanoseconds, not microseconds.
+  isr_ptr->setTime(FTM0_C0V/(31250.0/2));   //TODO this number is in seconds, not milliseconds.
 
   if ((FTM0_SC&FTM_SC_TOF) != 0) {   // Read the timer overflow flag (TOF) in the status and control register (FTM0_SC)
     FTM0_SC &= ~FTM_SC_TOF; //reset overflow
