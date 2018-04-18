@@ -26,7 +26,7 @@ void Counter::init(){
   this->speedPulses = 0;
   this->time = 0;
   isr_ptr = this;
-
+  CORE_PIN22_CONFIG = PORT_PCR_MUX(4);
   // Input filter to help prevent glitches from triggering the capture
   // 4+4×val clock cycles, 48MHz = 4+4*7 = 32 clock cycles = 0.75us
   FTM0_FILTER = 0x07;
@@ -36,6 +36,7 @@ void Counter::init(){
   // FAULTIE=0, FAULTM=00, CAPTEST=0, PWMSYNC=0, WPDIS=1, INIT=0, FTMEN=1
   FTM0_MODE = 0x05;
 
+  NVIC_DISABLE_IRQ(IRQ_FTM0);
   // FLEXTimer0 configuration
   // Clock source is Fixed Frequency Clock running at 31.25kHz (FLL Clock input = MCGFFCLK)
   // Dividing that by 2 would have the counter roll over about every 4 seconds
@@ -45,7 +46,6 @@ void Counter::init(){
   FTM0_SC = 0x11; // TOF=0 TOIE=0 CPWMS=0 CLKS=10 (FF clock) PS=001 (divide by 2)
   FTM0_C0SC = 0x48; // CHF=0 CHIE=1 (enable interrupt) MSB=0 MSA=0 ELSB=1 (input capture) ELSA=0 DMA=0
   NVIC_ENABLE_IRQ(IRQ_FTM0);   // Enable FTM0 interrupt inside NVIC
-  CORE_PIN22_CONFIG = PORT_PCR_MUX(4);
   //PORTC_PCR1 |= 0x400; // PIN configuration, alternative function 4 on Pin 44 (Teensy 22) (FTM0_CH0)
 };
 
@@ -120,7 +120,7 @@ int Counter::getPulses(){
 void ftm0_isr(void){
   isr_ptr->setCount(); //one rotation has occured
   FTM0_CNT = 0x0000; // Reset count value
-  isr_ptr->setTime(FTM0_C0V/(31250.0/2));   //TODO this number is in seconds, not milliseconds.
+  isr_ptr->setTime(FTM0_C0V/(31250.0/2000)); //clock rate to MS
 
   if ((FTM0_SC&FTM_SC_TOF) != 0) {   // Read the timer overflow flag (TOF) in the status and control register (FTM0_SC)
     FTM0_SC &= ~FTM_SC_TOF; //reset overflow

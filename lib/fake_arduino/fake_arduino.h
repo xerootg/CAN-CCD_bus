@@ -11,3 +11,4 @@ int FTM0_C0V;
 int FTM_SC_TOF;
 int PORT_PCR_MUX(int mode){return mode;}
 int NVIC_ENABLE_IRQ(int mode){return mode;}
+int NVIC_DISABLE_IRQ(int mode){return mode;}
