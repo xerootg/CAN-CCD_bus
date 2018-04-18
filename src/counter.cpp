@@ -20,10 +20,33 @@ TIMER ISR hooks into two places:
 
 
 //get the counter class ready for counting
+static Counter * isr_ptr; //pointer to hold reference to Counter class for the ISR to hook into
 void Counter::init(){
   this->distancePulses = 0;
   this->speedPulses = 0;
   this->time = 0;
+  isr_ptr = this;
+
+  // Input filter to help prevent glitches from triggering the capture
+  // 4+4×val clock cycles, 48MHz = 4+4*7 = 32 clock cycles = 0.75us
+  FTM0_FILTER = 0x07;
+
+  // Must set the Write-protect disable (WPDIS) bit to allow modifying other registers
+  // The enable (FTMEN) bit is also set to enable the FlexTimer0 module
+  // FAULTIE=0, FAULTM=00, CAPTEST=0, PWMSYNC=0, WPDIS=1, INIT=0, FTMEN=1
+  FTM0_MODE = 0x05;
+
+  // FLEXTimer0 configuration
+  // Clock source is Fixed Frequency Clock running at 31.25kHz (FLL Clock input = MCGFFCLK)
+  // Dividing that by 2 would have the counter roll over about every 4 seconds
+  FTM0_SC = 0x00; // Set this to zero before changing the modulus
+  FTM0_CNT = 0x0000; // Reset the count to zero
+  FTM0_MOD = 0xFFFF; // max modulus = 65535
+  FTM0_SC = 0x11; // TOF=0 TOIE=0 CPWMS=0 CLKS=10 (FF clock) PS=001 (divide by 2)
+  FTM0_C0SC = 0x48; // CHF=0 CHIE=1 (enable interrupt) MSB=0 MSA=0 ELSB=1 (input capture) ELSA=0 DMA=0
+  NVIC_ENABLE_IRQ(IRQ_FTM0);   // Enable FTM0 interrupt inside NVIC
+  CORE_PIN22_CONFIG = PORT_PCR_MUX(4);
+  //PORTC_PCR1 |= 0x400; // PIN configuration, alternative function 4 on Pin 44 (Teensy 22) (FTM0_CH0)
 };
 
 //reset the distance, i.e. after setting both speed and distance in the same round of updates
@@ -93,3 +116,14 @@ void Counter::resetTime(){
 int Counter::getPulses(){
   return this->distancePulses;
 };
+
+void ftm0_isr(void){
+  isr_ptr->setCount(); //one rotation has occured
+  FTM0_CNT = 0x0000; // Reset count value
+  isr_ptr->setTime(FTM0_C0V);   //TODO might be in nanoseconds, not microseconds.
+
+  if ((FTM0_SC&FTM_SC_TOF) != 0) {   // Read the timer overflow flag (TOF) in the status and control register (FTM0_SC)
+    FTM0_SC &= ~FTM_SC_TOF; //reset overflow
+  }
+  FTM0_C0SC &= ~0x80; // clear channel interrupt flag (CHF)
+}

@@ -18,6 +18,7 @@ public:
 private:
 	float getDistance_miles(int pulses);
   void doUpdates();
+	friend void ftm0_isr(void);
 	int time;
 	int distancePulses;
 	int speedPulses;
