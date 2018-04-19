@@ -39,11 +39,14 @@ void Counter::init(){
   NVIC_DISABLE_IRQ(IRQ_FTM0);
   // FLEXTimer0 configuration
   // Clock source is Fixed Frequency Clock running at 31.25kHz (FLL Clock input = MCGFFCLK)
-  // Dividing that by 2 would have the counter roll over about every 4 seconds
+  // Dividing that by 8 would have the counter roll over about every 16.8 seconds
+  // This would leave a single tick per 2.56 ms or .3906 pulses per ms.
+  // 0.390625*60*60*1000/8000= 175.78125mph max measured speed.
+
   FTM0_SC = 0x00; // Set this to zero before changing the modulus
   FTM0_CNT = 0x0000; // Reset the count to zero
   FTM0_MOD = 0xFFFF; // max modulus = 65535
-  FTM0_SC = 0x11; // TOF=0 TOIE=0 CPWMS=0 CLKS=10 (FF clock) PS=001 (divide by 2)
+  FTM0_SC = 0x13; // TOF=0 TOIE=0 CPWMS=0 CLKS=10 (FF clock) PS=011 (divide by 8)
   FTM0_C0SC = 0x48; // CHF=0 CHIE=1 (enable interrupt) MSB=0 MSA=0 ELSB=1 (input capture) ELSA=0 DMA=0
   NVIC_ENABLE_IRQ(IRQ_FTM0);   // Enable FTM0 interrupt inside NVIC
   //PORTC_PCR1 |= 0x400; // PIN configuration, alternative function 4 on Pin 44 (Teensy 22) (FTM0_CH0)
@@ -120,7 +123,7 @@ int Counter::getPulses(){
 void ftm0_isr(void){
   isr_ptr->setCount(); //one rotation has occured
   FTM0_CNT = 0x0000; // Reset count value
-  isr_ptr->setTime(FTM0_C0V/(31250.0/2000)); //clock rate to MS
+  isr_ptr->setTime(FTM0_C0V/(31250.0/8000)); //clock rate to MS
 
   if ((FTM0_SC&FTM_SC_TOF) != 0) {   // Read the timer overflow flag (TOF) in the status and control register (FTM0_SC)
     FTM0_SC &= ~FTM_SC_TOF; //reset overflow
