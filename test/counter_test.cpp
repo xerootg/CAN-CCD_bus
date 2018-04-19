@@ -1,14 +1,13 @@
 #ifdef UNIT_TEST
 
 #include "tests.h"
-#include "counter.h"
 
 Counter* counter;
 
 #include <unity.h>
 #include <stdio.h>
 
-void setUp(){
+void setUpCounter(){
   counter = new Counter();
   counter->init();
 }
