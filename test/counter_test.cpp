@@ -1,6 +1,6 @@
 #ifdef UNIT_TEST
 
-#include "counter_test.h"
+#include "tests.h"
 #include "counter.h"
 
 Counter* counter;
