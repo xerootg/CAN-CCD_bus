@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="D">
   <design>
-    <source>C:/Users/johnp/OneDrive/ccd_can_bridge/ccd_can_bridge.sch</source>
-    <date>5/18/2017 10:56:17 PM</date>
-    <tool>Eeschema 4.0.6</tool>
+    <source>C:/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/board/ccd_can_bridge.sch</source>
+    <date>4/20/2018 2:19:31 PM</date>
+    <tool>Eeschema 4.0.7</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title/>
@@ -327,7 +327,7 @@
     <comp ref="U5">
       <value>MCP6002</value>
       <footprint>Housings_DIP:DIP-8_W7.62mm_Socket_LongPads</footprint>
-      <libsource lib="linear" part="MCP6002"/>
+      <libsource lib="ccd_can_bridge-cache" part="MCP6002"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>58D31626</tstamp>
     </comp>
@@ -355,14 +355,14 @@
     <comp ref="U3">
       <value>MCP6002</value>
       <footprint>Housings_DIP:DIP-8_W7.62mm_Socket_LongPads</footprint>
-      <libsource lib="linear" part="MCP6002"/>
+      <libsource lib="ccd_can_bridge-cache" part="MCP6002"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>58D61E35</tstamp>
     </comp>
     <comp ref="U4">
       <value>MCP6002</value>
       <footprint>Housings_DIP:DIP-8_W7.62mm_Socket_LongPads</footprint>
-      <libsource lib="linear" part="MCP6002"/>
+      <libsource lib="ccd_can_bridge-cache" part="MCP6002"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>58D620C3</tstamp>
     </comp>
@@ -376,7 +376,7 @@
     <comp ref="P1">
       <value>CONN_01X02</value>
       <footprint>Pin_Headers:Pin_Header_Straight_1x02_Pitch2.54mm</footprint>
-      <libsource lib="conn" part="CONN_01X02"/>
+      <libsource lib="ccd_can_bridge-cache" part="CONN_01X02"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>58D98D35</tstamp>
     </comp>
@@ -614,7 +614,7 @@
     <comp ref="J1">
       <value>CONN_01X12</value>
       <footprint>Pin_Headers:Pin_Header_Angled_1x12_Pitch2.54mm</footprint>
-      <libsource lib="conn" part="CONN_01X12"/>
+      <libsource lib="ccd_can_bridge-cache" part="CONN_01X12"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>58E09146</tstamp>
     </comp>
@@ -678,8 +678,7 @@
         <pin num="14" name="Vdd" type="power_in"/>
       </pins>
     </libpart>
-    <libpart lib="conn" part="CONN_01X02">
-      <description>Connector, single row, 01x02, pin header</description>
+    <libpart lib="ccd_can_bridge-cache" part="CONN_01X02">
       <footprints>
         <fp>Pin_Header_Straight_1X*</fp>
         <fp>Pin_Header_Angled_1X*</fp>
@@ -695,8 +694,7 @@
         <pin num="2" name="P2" type="passive"/>
       </pins>
     </libpart>
-    <libpart lib="conn" part="CONN_01X12">
-      <description>Connector, single row, 01x12, pin header</description>
+    <libpart lib="ccd_can_bridge-cache" part="CONN_01X12">
       <footprints>
         <fp>Pin_Header_Straight_1X*</fp>
         <fp>Pin_Header_Angled_1X*</fp>
@@ -868,14 +866,12 @@
         <pin num="32" name="~" type="input"/>
       </pins>
     </libpart>
-    <libpart lib="linear" part="OP275">
+    <libpart lib="ccd_can_bridge-cache" part="OP275">
       <aliases>
         <alias>ADA4075</alias>
         <alias>MCP6002</alias>
         <alias>LM7332</alias>
       </aliases>
-      <description>Dual Op amp (low power)</description>
-      <docs>analog-dev/op275.pdf</docs>
       <footprints>
         <fp>DIP*W7.62mm*</fp>
         <fp>SOIC*3.9x4.9mm*Pitch1.27mm*</fp>
@@ -1023,35 +1019,32 @@
     <library logical="device">
       <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
     </library>
-    <library logical="Molex_MX120">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\Molex_MX120.lib</uri>
+    <library logical="teensy">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\teensy.lib</uri>
+    </library>
+    <library logical="oscillator-cmos-out-4">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\oscillator-cmos-out-4.lib</uri>
+    </library>
+    <library logical="Common-Parts-Library">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\Common-Parts-Library-KiCad\Common-Parts-Library.lib</uri>
+    </library>
+    <library logical="CDP68HC68S1">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\CDP68HC68S1.lib</uri>
     </library>
     <library logical="1066">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\1066.lib</uri>
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\1066.lib</uri>
     </library>
-    <library logical="conn">
-      <uri>C:\Program Files\KiCad\share\kicad\library\conn.lib</uri>
+    <library logical="Molex_MX120">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\Molex_MX120.lib</uri>
     </library>
     <library logical="MCP2561">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\MCP2561.lib</uri>
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\MCP2561.lib</uri>
+    </library>
+    <library logical="ccd_can_bridge-cache">
+      <uri>C:\Users\johnp\Documents\PlatformIO\Projects\CCD_CAN_BridgeStuff\board\ccd_can_bridge-cache.lib</uri>
     </library>
     <library logical="tc4427">
       <uri>C:\Users\johnp\Desktop\rusefi\hardware\rusefi_lib\tc4427.lib</uri>
-    </library>
-    <library logical="CDP68HC68S1">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\CDP68HC68S1.lib</uri>
-    </library>
-    <library logical="oscillator-cmos-out-4">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\oscillator-cmos-out-4.lib</uri>
-    </library>
-    <library logical="Common-Parts-Library">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\Common-Parts-Library-KiCad\Common-Parts-Library.lib</uri>
-    </library>
-    <library logical="linear">
-      <uri>C:\Program Files\KiCad\share\kicad\library\linear.lib</uri>
-    </library>
-    <library logical="teensy">
-      <uri>C:\Users\johnp\OneDrive\ccd_can_bridge\teensy.lib</uri>
     </library>
   </libraries>
   <nets>
