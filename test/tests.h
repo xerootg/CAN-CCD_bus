@@ -3,9 +3,9 @@
 #include "CAN.h"
 #include "VehicleState.h"
 
-int run_counter_tests();
-int run_ccd_tests();
-int run_vehicleState_tests();
+void run_counter_tests();
+void run_ccd_tests();
+void run_vehicleState_tests();
 void setUpCan();
 void setUpCounter();
 void setUpVehicleState();

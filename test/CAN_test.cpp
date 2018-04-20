@@ -12,9 +12,7 @@ void CCD_tests_load (){
   TEST_ASSERT_EQUAL_INT(1,can->init());
 }
 
-int run_ccd_tests(){
-    UNITY_BEGIN();
+void run_ccd_tests(){
     RUN_TEST(CCD_tests_load);
-    return UNITY_END();
 }
 #endif

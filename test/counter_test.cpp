@@ -134,8 +134,7 @@ void getSpeed_and_getDistance_reset_but_dont_break_eachother(){
 
 }
 
-int run_counter_tests(){
-  UNITY_BEGIN();
+void run_counter_tests(){
   RUN_TEST(counter_is_init);
   RUN_TEST(counter_counts);
   RUN_TEST(resetDistance_flushes_count);
@@ -146,7 +145,6 @@ int run_counter_tests(){
   RUN_TEST(resetTime_zeros_time);
   RUN_TEST(when_time_and_distance_is_zero_speed_is_zero);
   RUN_TEST(getSpeed_and_getDistance_reset_but_dont_break_eachother);
-  return UNITY_END();
 }
 
 #endif

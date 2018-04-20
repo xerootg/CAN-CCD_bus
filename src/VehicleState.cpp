@@ -151,7 +151,7 @@ void VehicleState::celOff(){
 }
 
 bool VehicleState::getCheckGauges(){
-  this->checkGauges_illuminated;
+  return this->checkGauges_illuminated;
 }
 
 void VehicleState::setCheckGauges(bool state){

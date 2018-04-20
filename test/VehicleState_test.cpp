@@ -154,7 +154,7 @@ void can_manage_checkGauges_lamp(){
   TEST_ASSERT_TRUE(state->getCheckGauges());
 
   state->setCheckGauges(false);
-  TEST_ASSERT_FALSE(state->getCheckGauges())
+  TEST_ASSERT_FALSE(state->getCheckGauges());
 }
 
 void can_manage_airbag_lamp(){
@@ -171,8 +171,7 @@ void can_manage_airbag_lamp(){
   TEST_ASSERT_FALSE(state->getAirbagLamp());
 }
 
-int run_vehicleState_tests(){
-    UNITY_BEGIN();
+void run_vehicleState_tests(){
     RUN_TEST(VehicleState_tests_load);
     RUN_TEST(can_manage_volts);
     RUN_TEST(can_manage_fuel);
@@ -186,6 +185,5 @@ int run_vehicleState_tests(){
     RUN_TEST(can_manage_CEL);
     RUN_TEST(can_manage_checkGauges_lamp);
     RUN_TEST(can_manage_airbag_lamp);
-    return UNITY_END();
 }
 #endif
