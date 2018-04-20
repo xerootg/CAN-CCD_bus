@@ -9,7 +9,7 @@ void setUpCan(){
 }
 
 void CCD_tests_load (){
-  TEST_ASSERT_EQUAL_INT(0,can->init());
+  TEST_ASSERT_EQUAL_INT(1,can->init());
 }
 
 int run_ccd_tests(){
