@@ -20,6 +20,7 @@ Hardware Concept
 * dedicated CCD interface IC - CDP68HC68S1
 * CAN handled by teensy/MPC2551
 * I/O for all circuits missing from engine/Jeep
+* [BOM at Mouser](https://www.mouser.com/ProjectManager/ProjectDetail.aspx?AccessID=2fd919600a)
 
 The VW ECU expects a handful of things the Jeep does not handled
 * fuel level (leters)
