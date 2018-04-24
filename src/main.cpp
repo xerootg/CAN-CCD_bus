@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include <FlexCAN.h>
 #include <Eventually.h>
-#include <counter.h>
-#include <CCD.h>
+#include <controllers/counter.h>
+#include <views/CCD.h>
 #include <stdint.h>
 
 EvtManager mgr;

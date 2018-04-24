@@ -44,6 +44,17 @@ Software Concept
 To run tests, run `pio test -e native`
 To compile ELF for teensy, run `pio run`
 
+I'm a web developer so this is gonna be MVCish. 
+- Model: Holds some state
+- View: Puts state, I.E. does the actual interface with HW
+- Controller: translates between model and view, and viceversa
+
+The counter class implements logic to read the hardware model, so by this definition it is a Controller.
+The VehicleState class is just a holder of state, so it is squarely a Model.
+The CCD hardware interface gets/sets values on the HardwareSerial interface, so it is a view.
+
+This will likely morph.
+
 TODO
 ----
 

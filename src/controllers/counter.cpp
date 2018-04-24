@@ -4,7 +4,7 @@
 #include <fake_arduino.h>
 #endif
 
-#include <counter.h>
+#include "counter.h"
 #include <math.h>
 
 //Implementation from http://www.digitalmisery.com/2013/06/timer-input-capture-on-teensy-3-0/

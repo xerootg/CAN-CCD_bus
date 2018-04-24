@@ -1,9 +1,6 @@
 #ifdef UNIT_TEST
 #include "tests.h"
 #include <unity.h>
-#ifndef __VehicleState_h
-#include <VehicleState.h>
-#endif
 
 VehicleState* state;
 
