@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/lib/**"
+                
+            ],
+            "defines": [
+                "__MK20DX256__",
+                "USING_MAKEFILE",
+                "USB_SERIAL",
+                "LAYOUT_US_ENGLISH",
+                "F_CPU=96000000"
+            ],
+            "windowsSdkVersion": "10.0.17134.0",
+            "compilerPath": "C:/Program Files (x86)/Arduino/hardware/tools/arm/bin/arm-none-eabi-gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
