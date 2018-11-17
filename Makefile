@@ -32,7 +32,10 @@ OBJ_FILES := $(addprefix $(OBJDIR)/,$(notdir $(CPP_FILES:.cpp=.o))) $(addprefix 
 #  won't be sharing the object files for these. Thus, we only put things here
 #  that need to be compiled locally (*.c, *.cpp, *.s). No libries (*.a, *.lib)
 #  go here.
-OBJ_FILES += $(OBJDIR)/pins_teensy.o $(OBJDIR)/yield.o $(OBJDIR)/analog.o $(OBJDIR)/mk20dx128.o
+
+OBJ_FILES += $(OBJDIR)/pins_teensy.o$(OBJDIR)/yield.o $(OBJDIR)/analog.o $(OBJDIR)/mk20dx128.o 
+OBJ_FILES += $(OBJDIR)/FlexCAN.o $(OBJDIR)/Eventually.o 
+#OBJ_FILES += $(OBJDIR)/EventResponder.o $(OBJDIR)/HardwareSerial1.o 
 
 #  Next we need to define some things in order for Teensyduino to work.
 #  Teensyduino in generaly will not throw any errors or generate any warnings if
@@ -62,6 +65,9 @@ TOOLPATH = $(ARDUINOPATH)/tools/arm
 #  efficiency's sake.
 TEENSY3X_BASEPATH = lib/cores/teensy3
 
+TEENSY_CPP_FILES := $(wildcard $(TEENSY3X_BASEPATH)/*.cpp)
+TEENSY_C_FILES := $(wildcard $(TEENSY3X_BASEPATH)/*.c)
+OBJ_FILES += $(addprefix $(OBJDIR)/,$(notdir $(TEENSY_CPP_FILES:.cpp=.o))) $(addprefix $(OBJDIR)/,$(notdir $(TEENSY_C_FILES:.c=.o)))
 
 #
 #  Select the target type.  This is typically arm-none-eabi.
@@ -76,7 +82,8 @@ TARGETTYPE = arm-none-eabi
 #  include paths to any needed GCC includes or libraries.
 TEENSY3X_INC     = $(TEENSY3X_BASEPATH)
 GCC_INC          = $(TOOLPATH)/$(TARGETTYPE)/include
-
+FLEXCAN_LIB      = lib/FlexCAN_Library
+EVENTUALLY_LIB   = lib/Eventually/src
 
 #  All possible source directories other than '.' must be defined in
 #  the VPATH variable.  This lets make tell the compiler where to find
@@ -86,14 +93,16 @@ GCC_INC          = $(TOOLPATH)/$(TARGETTYPE)/include
 #  We don't particularly use this since we explicitly specify the src directory,
 #  but we could change things to actually use this.
 VPATH = $(TEENSY3X_BASEPATH)
+VPATH +=:$(FLEXCAN_LIB)
+VPATH +=:$(EVENTUALLY_LIB)
 
 				
 #  List of directories to be searched for include files during compilation
 INCDIRS  = -I$(GCC_INC)
 INCDIRS += -I$(TEENSY3X_INC)
 ###### ADD LIBRARIES FROM /lib HERE######
-INCDIRS += -Ilib/Eventually/src
-INCDIRS += -Ilib/FlexCAN_Library
+INCDIRS += -I$(EVENTUALLY_LIB)
+INCDIRS += -I$(FLEXCAN_LIB)
 INCDIRS += -Iinclude
 INCDIRS += -I.
 
@@ -110,16 +119,16 @@ DEBUG = -g
 #  
 #  These values are copied from the Makefile that ships with Teensyduino.
 LIBDIRS  =
-LIBS = -lm
+LIBS = -lm -lsupc++
 
 #  Compiler options
 GCFLAGS = -Wall -fno-common -mcpu=$(CPU) -mthumb -MMD -O$(OPTIMIZATION) $(DEBUG)
 GCFLAGS += $(INCDIRS)
-GCFLAGS += -DF_CPU=$(F_CPU) -D__$(CHIP)__ -DUSB_SERIAL -DLAYOUT_US_ENGLISH
+GCFLAGS += -DF_CPU=$(F_CPU) -D__MK20DX256__ -DUSING_MAKEFILE -DKINETISK -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # _GNU_SOURCE gives us isascii and toascii, called in cores/teensy3/WCharacter.h
 GCFLAGS += -D_GNU_SOURCE
-GCFLAGS += -std=c++11
+GCXXFLAGS = -std=c++11# -MMD
 
 # You can uncomment the following line to create an assembly output
 # listing of your C files.  If you do this, however, the sed script
@@ -178,7 +187,7 @@ $(OUTPUTDIR)/$(PROJECT).hex: $(OUTPUTDIR)/$(PROJECT).elf
 #  Linker invocation
 $(OUTPUTDIR)/$(PROJECT).elf: $(OBJ_FILES)
 	@mkdir -p $(dir $@)
-	$(CC) $(OBJ_FILES) $(LDFLAGS) -o $(OUTPUTDIR)/$(PROJECT).elf
+	$(CC) $^ $(LDFLAGS) -o $(OUTPUTDIR)/$(PROJECT).elf
 
 stats: $(OUTPUTDIR)/$(PROJECT).elf
 	$(SIZE) $(OUTPUTDIR)/$(PROJECT).elf
@@ -218,8 +227,7 @@ toolvers:
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@echo Compiling $<, writing to $@...
 	@mkdir -p $(dir $@)
-#	$(CC) $(GCFLAGS) -c $< -o $@ > $(basename $@).lst
-	$(CC) $(GCFLAGS) -c $< -o $@ 2>&1 | sed -e 's/\(\w\+\):\([0-9]\+\):/\1(\2):/'
+	$(CC) $(GCFLAGS) -c $< -o $@ > $(basename $@).lst
 
 $(OBJDIR)/%.o : $(TEENSY3X_BASEPATH)/%.c
 	@echo Compiling $<, writing to $@...
@@ -229,12 +237,22 @@ $(OBJDIR)/%.o : $(TEENSY3X_BASEPATH)/%.c
 $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	@mkdir -p $(dir $@)
 	@echo Compiling $<, writing to $@...
-	$(CC) $(GCFLAGS) -c $< -o $@
+	$(CC) $(GCFLAGS) $(GCXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o : $(TEENSY3X_BASEPATH)/%.cpp
 	@mkdir -p $(dir $@)
 	@echo Compiling $<, writing to $@...
-	$(CC) $(GCFLAGS) -c $< -o $@
+	$(CC) $(GCFLAGS) $(GCXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/FlexCAN.o : $(FLEXCAN_LIB)/FlexCAN.cpp
+	@echo Compiling $<, writing to $@...
+	@mkdir -p $(dir $@)
+	$(CC) $(GCFLAGS) $(GCXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/Eventually.o : $(EVENTUALLY_LIB)/Eventually.cpp
+	@echo Compiling $<, writing to $@...
+	@mkdir -p $(dir $@)
+	$(CC) $(GCFLAGS) $(GCXXFLAGS) -c $< -o $@
 
 #  There are two options for assembling .s files to .o; uncomment only one.
 #  The shorter option is suitable for making from the command-line.

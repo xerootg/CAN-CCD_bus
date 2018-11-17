@@ -2,7 +2,7 @@
 
 #include <main.h>
 #include <Arduino.h>
-#include "../lib/FlexCAN_Library/FlexCAN.h"
+#include <FlexCAN.h>
 #include <Eventually.h>
 #include <counter.h>
 #include <CCD.h>
@@ -108,6 +108,10 @@ void setup() {
   mgr.addListener(new EvtTimeListener(1000, true, (EvtAction)check_oil_pressure));
   mgr.addListener(new EvtTimeListener(1000, true, (EvtAction)check_fuel_level));
 }
-
+int main() {
+  loop();
+  while(1){}
+  return 1;
+}
 USE_EVENTUALLY_LOOP(mgr)
 #endif
