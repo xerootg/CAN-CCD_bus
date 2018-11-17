@@ -1,3 +1,12 @@
 [submodule "lib/FlexCAN_Library"]
 	path = lib/FlexCAN_Library
 	url = https://github.com/collin80/FlexCAN_Library
+[submodule "lib/Eventually"]
+	path = lib/Eventually
+	url = https://github.com/johnnyb/Eventually.git
+[submodule "cores"]
+	path = cores
+	url = https://github.com/PaulStoffregen/cores.git
+[submodule "lib/cores"]
+	path = lib/cores
+	url = https://github.com/PaulStoffregen/cores.git

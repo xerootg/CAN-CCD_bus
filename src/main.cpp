@@ -2,7 +2,7 @@
 
 #include <main.h>
 #include <Arduino.h>
-#include <FlexCAN.h>
+#include "../lib/FlexCAN_Library/FlexCAN.h"
 #include <Eventually.h>
 #include <counter.h>
 #include <CCD.h>
