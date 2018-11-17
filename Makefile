@@ -33,7 +33,7 @@ OBJ_FILES := $(addprefix $(OBJDIR)/,$(notdir $(CPP_FILES:.cpp=.o))) $(addprefix 
 #  that need to be compiled locally (*.c, *.cpp, *.s). No libries (*.a, *.lib)
 #  go here.
 
-OBJ_FILES += $(OBJDIR)/pins_teensy.o$(OBJDIR)/yield.o $(OBJDIR)/analog.o $(OBJDIR)/mk20dx128.o 
+OBJ_FILES += $(OBJDIR)/pins_teensy.o $(OBJDIR)/yield.o $(OBJDIR)/analog.o $(OBJDIR)/mk20dx128.o 
 OBJ_FILES += $(OBJDIR)/FlexCAN.o $(OBJDIR)/Eventually.o 
 #OBJ_FILES += $(OBJDIR)/EventResponder.o $(OBJDIR)/HardwareSerial1.o 
 
@@ -124,7 +124,7 @@ LIBS = -lm -lsupc++
 #  Compiler options
 GCFLAGS = -Wall -fno-common -mcpu=$(CPU) -mthumb -MMD -O$(OPTIMIZATION) $(DEBUG)
 GCFLAGS += $(INCDIRS)
-GCFLAGS += -DF_CPU=$(F_CPU) -D__MK20DX256__ -DUSING_MAKEFILE -DKINETISK -DUSB_SERIAL -DLAYOUT_US_ENGLISH
+GCFLAGS += -DF_CPU=$(F_CPU) -D__MK20DX256__ -DUSING_MAKEFILE -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # _GNU_SOURCE gives us isascii and toascii, called in cores/teensy3/WCharacter.h
 GCFLAGS += -D_GNU_SOURCE
@@ -253,6 +253,11 @@ $(OBJDIR)/Eventually.o : $(EVENTUALLY_LIB)/Eventually.cpp
 	@echo Compiling $<, writing to $@...
 	@mkdir -p $(dir $@)
 	$(CC) $(GCFLAGS) $(GCXXFLAGS) -c $< -o $@
+
+$(OBJDIR)/pins_teensy.o : $(TEENSY3X_BASEPATH)/pins_teensy.c $(TEENSY3X_BASEPATH)/pins_arduino.h $(TEENSY3X_BASEPATH)/core_pins.h $(TEENSY3X_BASEPATH)/HardwareSerial.h
+	@echo Compiling $<, writing to $@...
+	@mkdir -p $(dir $@)
+	$(CC) $(GCFLAGS) -c $< -o $@
 
 #  There are two options for assembling .s files to .o; uncomment only one.
 #  The shorter option is suitable for making from the command-line.
