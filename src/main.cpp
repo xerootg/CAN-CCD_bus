@@ -2,16 +2,19 @@
 
 #include <main.h>
 #include <Arduino.h>
-#include <FlexCAN.h>
 #include <Eventually.h>
 #include <controllers/counter.h>
 #include <views/CCD.h>
+#include <controllers/CAN.h>
 #include <stdint.h>
 
 EvtManager mgr;
 CCD ccdBus;
-Counter counter;
+VehicleState state;
 FlexCAN CANbus(500000);
+CAN can(&CANbus, &state);
+
+Counter counter;
 EvtPinListener *steeringWheelEvt;
 
 /* CCD distance notation is as follows:
@@ -75,7 +78,6 @@ bool manage_steering_buttons(){
 }
 
 void setup() {
-  CANbus.begin();
   ccdBus.init(Serial1);
   ccdBus.setSKIMLight(false);
   counter.init();

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <Arduino.h>
 
 class Counter {
 public:

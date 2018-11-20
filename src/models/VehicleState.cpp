@@ -52,11 +52,11 @@ float VehicleState::getSpeedKPH(){
   return this->kph;
 }
 
-void VehicleState::setRPMs(int rpm){
+void VehicleState::setRPMs(float rpm){
   this->rpm = rpm;
 }
 
-int VehicleState::getRPMs(){
+float VehicleState::getRPMs(){
   return this->rpm;
 }
 

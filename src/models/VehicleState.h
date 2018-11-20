@@ -10,8 +10,8 @@ public:
   void setSpeedMPH(float mph);
   float getSpeedMPH();
   float getSpeedKPH();
-  void setRPMs(int rpm);
-  int getRPMs();
+  void setRPMs(float rpm);
+  float getRPMs();
   void setOilPSI(float psi);
   float getOilPSI();
   void setTempF(float deg_f);
@@ -48,7 +48,7 @@ private:
   int tankCapacity = 30;
   float kph;
   float mph;
-  int rpm;
+  float rpm;
   float psi;
   float deg_c;
   float deg_f;

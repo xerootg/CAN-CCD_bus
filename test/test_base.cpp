@@ -8,7 +8,12 @@
 
 #include "tests.h"
 
+#include <ArduinoFake.h>
+
+using namespace fakeit;
+
 void setUp(){
+  ArduinoFakeReset();
   setUpCounter();
   setUpCan();
   setUpVehicleState();

@@ -15,7 +15,7 @@ void VehicleState_tests_load(){
   TEST_ASSERT_EQUAL_FLOAT(0.0, state->getFuelLeters());
   TEST_ASSERT_EQUAL_FLOAT(0.0, state->getSpeedKPH());
   TEST_ASSERT_EQUAL_FLOAT(0.0, state->getSpeedMPH());
-  TEST_ASSERT_EQUAL_INT(0, state->getRPMs());
+  TEST_ASSERT_EQUAL_FLOAT(0, state->getRPMs());
   TEST_ASSERT_EQUAL_FLOAT(0.0, state->getOilPSI());
   TEST_ASSERT_EQUAL_FLOAT(0.0, state->getTempC());
   TEST_ASSERT_EQUAL_FLOAT(32.0, state->getTempF());
@@ -54,10 +54,10 @@ void can_manage_speed(){
 }
 
 void can_manage_engine_speed(){
-state->setRPMs(100);
-TEST_ASSERT_EQUAL_INT(100, state->getRPMs());
-state->setRPMs(7000);
-TEST_ASSERT_EQUAL_INT(7000, state->getRPMs());
+state->setRPMs(100.0);
+TEST_ASSERT_EQUAL_FLOAT(100.0, state->getRPMs());
+state->setRPMs(7000.0);
+TEST_ASSERT_EQUAL_FLOAT(7000.0, state->getRPMs());
 }
 
 void can_manage_oil_pressure(){

@@ -1,0 +1,40 @@
+Determining if the CXX compiler works failed with the following output:
+Change Dir: /mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_85a1d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_85a1d.dir/build.make CMakeFiles/cmTC_85a1d.dir/build
+make[1]: Entering directory '/mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_85a1d.dir/testCXXCompiler.cxx.obj
+/usr/bin/arm-none-eabi-g++  -DARDUINO=106 -DLAYOUT_US_ENGLISH -DTEENSYDUINO=120 -DUSB_PID=null -DUSB_VID=null -D__MK20DX256__ -I/mnt/c/Users/johnp/Desktop/cores/teensy3  -Os -Wall -nostdlib -ffunction-sections -fdata-sections -mcpu=cortex-m4 -mthumb -fno-exceptions -fno-rtti -felide-constructors -std=gnu++0x    -MMD -o CMakeFiles/cmTC_85a1d.dir/testCXXCompiler.cxx.obj -c /mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_85a1d
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_85a1d.dir/link.txt --verbose=1
+/usr/bin/arm-none-eabi-gcc  -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T/mnt/c/Users/johnp/Desktop/cores/teensy3/mk20dx256.ld  -o cmTC_85a1d  CMakeFiles/cmTC_85a1d.dir/testCXXCompiler.cxx.obj  -larm_cortexM4l_math -lm
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/bin/ld: cannot find -larm_cortexM4l_math
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_85a1d.dir/build.make:86: recipe for target 'cmTC_85a1d' failed
+make[1]: *** [cmTC_85a1d] Error 1
+make[1]: Leaving directory '/mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_85a1d/fast' failed
+make: *** [cmTC_85a1d/fast] Error 2
+
+
+Determining if the CXX compiler works failed with the following output:
+Change Dir: /mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_03ac1/fast"
+/usr/bin/make -f CMakeFiles/cmTC_03ac1.dir/build.make CMakeFiles/cmTC_03ac1.dir/build
+make[1]: Entering directory '/mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_03ac1.dir/testCXXCompiler.cxx.obj
+/usr/bin/arm-none-eabi-g++  -DARDUINO=106 -DLAYOUT_US_ENGLISH -DTEENSYDUINO=120 -DUSB_PID=null -DUSB_VID=null -D__MK20DX256__ -I/mnt/c/Users/johnp/Desktop/cores/teensy3  -Os -Wall -nostdlib -ffunction-sections -fdata-sections -mcpu=cortex-m4 -mthumb -fno-exceptions -fno-rtti -felide-constructors -std=gnu++0x    -MMD -o CMakeFiles/cmTC_03ac1.dir/testCXXCompiler.cxx.obj -c /mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_03ac1
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_03ac1.dir/link.txt --verbose=1
+/usr/bin/arm-none-eabi-gcc  -Os -Wl,--gc-sections -mcpu=cortex-m4 -mthumb -T/mnt/c/Users/johnp/Desktop/cores/teensy3/mk20dx256.ld  -o cmTC_03ac1  CMakeFiles/cmTC_03ac1.dir/testCXXCompiler.cxx.obj  -larm_cortexM4l_math -lm
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/bin/ld: cannot find -larm_cortexM4l_math
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_03ac1.dir/build.make:86: recipe for target 'cmTC_03ac1' failed
+make[1]: *** [cmTC_03ac1] Error 1
+make[1]: Leaving directory '/mnt/c/Users/johnp/Documents/PlatformIO/Projects/CCD_CAN_BridgeStuff/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_03ac1/fast' failed
+make: *** [cmTC_03ac1/fast] Error 2
+
+
